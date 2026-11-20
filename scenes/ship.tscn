@@ -1,0 +1,175 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://scripts/ship.gd" id="1_script"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_RedKeel"]
+albedo_color = Color(0.72, 0.18, 0.18, 1)
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="Mat_GrayHull"]
+albedo_color = Color(0.78, 0.81, 0.85, 1)
+roughness = 0.45
+
+[sub_resource type="StandardMaterial3D" id="Mat_DarkRim"]
+albedo_color = Color(0.18, 0.24, 0.32, 1)
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="Mat_Cabin"]
+albedo_color = Color(0.88, 0.90, 0.93, 1)
+roughness = 0.4
+
+[sub_resource type="StandardMaterial3D" id="Mat_Window"]
+albedo_color = Color(0.15, 0.28, 0.45, 1)
+roughness = 0.2
+emission_enabled = true
+emission = Color(0.1, 0.25, 0.45, 1)
+emission_energy_multiplier = 0.3
+
+[sub_resource type="StandardMaterial3D" id="Mat_Bronze"]
+albedo_color = Color(0.72, 0.48, 0.25, 1)
+metallic = 0.65
+roughness = 0.3
+
+[sub_resource type="StandardMaterial3D" id="Mat_DeckCrate"]
+albedo_color = Color(1, 0.42, 0.05, 1)
+roughness = 0.4
+
+[sub_resource type="BoxMesh" id="Mesh_Keel"]
+material = SubResource("Mat_RedKeel")
+size = Vector3(13.0, 1.2, 4.2)
+
+[sub_resource type="BoxMesh" id="Mesh_MainHull"]
+material = SubResource("Mat_GrayHull")
+size = Vector3(13.2, 2.0, 4.4)
+
+[sub_resource type="BoxMesh" id="Mesh_Rim"]
+material = SubResource("Mat_DarkRim")
+size = Vector3(13.4, 0.3, 4.6)
+
+[sub_resource type="BoxMesh" id="Mesh_Cabin"]
+material = SubResource("Mat_Cabin")
+size = Vector3(3.6, 2.2, 3.8)
+
+[sub_resource type="BoxMesh" id="Mesh_DeckCrate"]
+material = SubResource("Mat_DeckCrate")
+size = Vector3(1.1, 0.7, 0.7)
+
+[sub_resource type="BoxShape3D" id="Shape_Delivery"]
+size = Vector3(18.0, 6.0, 12.0)
+
+[node name="CargoShip" type="Node3D" groups=["ship"]]
+script = ExtResource("1_script")
+
+[node name="MeshRoot" type="Node3D" parent="."]
+
+[node name="Keel" type="MeshInstance3D" parent="MeshRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+mesh = SubResource("Mesh_Keel")
+
+[node name="MainHull" type="MeshInstance3D" parent="MeshRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, 0)
+mesh = SubResource("Mesh_MainHull")
+
+[node name="DeckRim" type="MeshInstance3D" parent="MeshRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.95, 0)
+mesh = SubResource("Mesh_Rim")
+
+[node name="BowPoint" type="MeshInstance3D" parent="MeshRoot"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 6.6, 1.9, 0)
+mesh = SubResource("Mesh_MainHull")
+scale = Vector3(0.35, 1, 0.35)
+
+[node name="Cabin" type="MeshInstance3D" parent="MeshRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.2, 3.6, 0)
+mesh = SubResource("Mesh_Cabin")
+
+[node name="CabinRoof" type="MeshInstance3D" parent="MeshRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.2, 4.8, 0)
+mesh = SubResource("Mesh_Rim")
+scale = Vector3(0.3, 0.8, 0.9)
+
+[node name="Windows" type="MeshInstance3D" parent="MeshRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.35, 3.8, 0)
+mesh = SubResource("Mesh_Rim")
+scale = Vector3(0.05, 1.8, 0.7)
+
+[node name="Propeller" type="MeshInstance3D" parent="MeshRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.9, 0.7, 0)
+
+[node name="Blade1" type="MeshInstance3D" parent="MeshRoot/Propeller"]
+transform = Transform3D(0.2, 0, 0, 0, 1, 0, 0, 0, 0.2, 0, 0, 0)
+mesh = SubResource("Mesh_Keel")
+surface_material_override/0 = SubResource("Mat_Bronze")
+
+[node name="Blade2" type="MeshInstance3D" parent="MeshRoot/Propeller"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("Mesh_Keel")
+surface_material_override/0 = SubResource("Mat_Bronze")
+
+[node name="Rudder" type="MeshInstance3D" parent="MeshRoot"]
+transform = Transform3D(0.1, 0, 0, 0, 1, 0, 0, 0, 0.8, -7.3, 0.7, 0)
+mesh = SubResource("Mesh_Keel")
+
+[node name="DeckCrates" type="Node3D" parent="MeshRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 3.1, 0)
+
+[node name="Crate0" type="MeshInstance3D" parent="MeshRoot/DeckCrates"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 0, -1.0)
+visible = false
+mesh = SubResource("Mesh_DeckCrate")
+
+[node name="Crate1" type="MeshInstance3D" parent="MeshRoot/DeckCrates"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0, -1.0)
+visible = false
+mesh = SubResource("Mesh_DeckCrate")
+
+[node name="Crate2" type="MeshInstance3D" parent="MeshRoot/DeckCrates"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0, -1.0)
+visible = false
+mesh = SubResource("Mesh_DeckCrate")
+
+[node name="Crate3" type="MeshInstance3D" parent="MeshRoot/DeckCrates"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 0, -1.0)
+visible = false
+mesh = SubResource("Mesh_DeckCrate")
+
+[node name="Crate4" type="MeshInstance3D" parent="MeshRoot/DeckCrates"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0, 0, -1.0)
+visible = false
+mesh = SubResource("Mesh_DeckCrate")
+
+[node name="Crate5" type="MeshInstance3D" parent="MeshRoot/DeckCrates"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 0, 1.0)
+visible = false
+mesh = SubResource("Mesh_DeckCrate")
+
+[node name="Crate6" type="MeshInstance3D" parent="MeshRoot/DeckCrates"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0, 1.0)
+visible = false
+mesh = SubResource("Mesh_DeckCrate")
+
+[node name="Crate7" type="MeshInstance3D" parent="MeshRoot/DeckCrates"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0, 1.0)
+visible = false
+mesh = SubResource("Mesh_DeckCrate")
+
+[node name="Crate8" type="MeshInstance3D" parent="MeshRoot/DeckCrates"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 0, 1.0)
+visible = false
+mesh = SubResource("Mesh_DeckCrate")
+
+[node name="Crate9" type="MeshInstance3D" parent="MeshRoot/DeckCrates"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0, 0, 1.0)
+visible = false
+mesh = SubResource("Mesh_DeckCrate")
+
+[node name="DeliveryArea" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeliveryArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0)
+shape = SubResource("Shape_Delivery")
+
+[connection signal="body_entered" from="DeliveryArea" to="." method="_on_delivery_area_body_entered"]
+[connection signal="body_exited" from="DeliveryArea" to="." method="_on_delivery_area_body_exited"]

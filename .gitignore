@@ -1,0 +1,12 @@
+# Godot 4 cache / editor data
+.godot/
+/android/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.log

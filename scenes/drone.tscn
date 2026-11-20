@@ -1,0 +1,250 @@
+[gd_scene load_steps=26 format=3]
+
+[ext_resource type="Script" path="res://scripts/drone.gd" id="1_script"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_Turquoise"]
+albedo_color = Color(0.08, 0.76, 0.82, 1)
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="Mat_White"]
+albedo_color = Color(0.96, 0.97, 0.98, 1)
+roughness = 0.3
+
+[sub_resource type="StandardMaterial3D" id="Mat_Visor"]
+albedo_color = Color(0.1, 0.14, 0.18, 1)
+roughness = 0.2
+
+[sub_resource type="StandardMaterial3D" id="Mat_CyanLight"]
+albedo_color = Color(0, 0.95, 1, 1)
+emission_enabled = true
+emission = Color(0, 0.95, 1, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="StandardMaterial3D" id="Mat_Propeller"]
+albedo_color = Color(0.2, 0.25, 0.3, 1)
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="Mat_CrateOrange"]
+albedo_color = Color(1, 0.42, 0.05, 1)
+roughness = 0.45
+
+[sub_resource type="SphereShape3D" id="Shape_Drone"]
+radius = 0.9
+
+[sub_resource type="SphereMesh" id="Mesh_BodyTop"]
+material = SubResource("Mat_Turquoise")
+radius = 0.55
+height = 0.65
+
+[sub_resource type="SphereMesh" id="Mesh_BodyBottom"]
+material = SubResource("Mat_White")
+radius = 0.52
+height = 0.5
+
+[sub_resource type="BoxMesh" id="Mesh_Visor"]
+material = SubResource("Mat_Visor")
+size = Vector3(0.45, 0.22, 0.25)
+
+[sub_resource type="SphereMesh" id="Mesh_Light"]
+material = SubResource("Mat_CyanLight")
+radius = 0.06
+height = 0.12
+
+[sub_resource type="CylinderMesh" id="Mesh_Arm"]
+material = SubResource("Mat_White")
+top_radius = 0.045
+bottom_radius = 0.045
+height = 1.3
+
+[sub_resource type="TorusMesh" id="Mesh_DuctRing"]
+material = SubResource("Mat_Turquoise")
+inner_radius = 0.32
+outer_radius = 0.45
+
+[sub_resource type="BoxMesh" id="Mesh_Blade"]
+material = SubResource("Mat_Propeller")
+size = Vector3(0.6, 0.02, 0.08)
+
+[sub_resource type="BoxMesh" id="Mesh_CarriedCrate"]
+material = SubResource("Mat_CrateOrange")
+size = Vector3(0.85, 0.55, 0.55)
+
+[sub_resource type="CylinderShape3D" id="Shape_Detect"]
+height = 24.0
+radius = 5.5
+
+[sub_resource type="StandardMaterial3D" id="Mat_TargetYellow"]
+albedo_color = Color(1, 0.82, 0.05, 1)
+emission_enabled = true
+emission = Color(1, 0.72, 0, 1)
+emission_energy_multiplier = 1.3
+
+[sub_resource type="StandardMaterial3D" id="Mat_ProgressBG"]
+albedo_color = Color(0.06, 0.12, 0.16, 0.9)
+
+[sub_resource type="StandardMaterial3D" id="Mat_ProgressFill"]
+albedo_color = Color(0.25, 1, 0.5, 1)
+emission_enabled = true
+emission = Color(0.2, 0.9, 0.4, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_BubbleWhite"]
+albedo_color = Color(1, 1, 1, 0.94)
+billboard_mode = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_ArrowHead"]
+material = SubResource("Mat_TargetYellow")
+top_radius = 0.0
+bottom_radius = 0.34
+height = 0.8
+rings = 1
+
+[sub_resource type="BoxMesh" id="Mesh_ArrowShaft"]
+material = SubResource("Mat_TargetYellow")
+size = Vector3(0.9, 0.16, 0.12)
+
+[sub_resource type="BoxMesh" id="Mesh_ProgressBarBG"]
+material = SubResource("Mat_ProgressBG")
+size = Vector3(1.7, 0.16, 0.08)
+
+[sub_resource type="BoxMesh" id="Mesh_ProgressBarFill"]
+material = SubResource("Mat_ProgressFill")
+size = Vector3(1.7, 0.16, 0.08)
+
+[sub_resource type="QuadMesh" id="Mesh_Bubble"]
+material = SubResource("Mat_BubbleWhite")
+size = Vector2(3.2, 0.82)
+
+[node name="RescueDrone" type="CharacterBody3D" groups=["drone"]]
+collision_layer = 1
+collision_mask = 6
+script = ExtResource("1_script")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape_Drone")
+
+[node name="VisualRoot" type="Node3D" parent="."]
+
+[node name="FuselageTop" type="MeshInstance3D" parent="VisualRoot"]
+transform = Transform3D(1.2, 0, 0, 0, 1, 0, 0, 0, 1.4, 0, 0.05, 0)
+mesh = SubResource("Mesh_BodyTop")
+
+[node name="FuselageBottom" type="MeshInstance3D" parent="VisualRoot"]
+transform = Transform3D(1.15, 0, 0, 0, 0.8, 0, 0, 0, 1.35, 0, -0.15, 0)
+mesh = SubResource("Mesh_BodyBottom")
+
+[node name="Visor" type="MeshInstance3D" parent="VisualRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0.6)
+mesh = SubResource("Mesh_Visor")
+
+[node name="LightL" type="MeshInstance3D" parent="VisualRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14, 0.05, 0.72)
+mesh = SubResource("Mesh_Light")
+
+[node name="LightR" type="MeshInstance3D" parent="VisualRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14, 0.05, 0.72)
+mesh = SubResource("Mesh_Light")
+
+[node name="Arms" type="Node3D" parent="VisualRoot"]
+
+[node name="ArmDiag1" type="MeshInstance3D" parent="VisualRoot/Arms"]
+transform = Transform3D(0.707107, -0.707107, 0, 0.707107, 0.707107, 0, 0, 0, 1, 0, 0, 0)
+rotation = Vector3(0, 0, 0.785398)
+mesh = SubResource("Mesh_Arm")
+scale = Vector3(1, 1.8, 1)
+
+[node name="ArmDiag2" type="MeshInstance3D" parent="VisualRoot/Arms"]
+transform = Transform3D(0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0, 1, 0, 0, 0)
+rotation = Vector3(0, 0, -0.785398)
+mesh = SubResource("Mesh_Arm")
+scale = Vector3(1, 1.8, 1)
+
+[node name="Rotor1" type="Node3D" parent="VisualRoot/Arms"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 0.05, -0.9)
+
+[node name="DuctRing" type="MeshInstance3D" parent="VisualRoot/Arms/Rotor1"]
+mesh = SubResource("Mesh_DuctRing")
+
+[node name="Blades" type="MeshInstance3D" parent="VisualRoot/Arms/Rotor1"]
+mesh = SubResource("Mesh_Blade")
+
+[node name="Rotor2" type="Node3D" parent="VisualRoot/Arms"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 0.05, -0.9)
+
+[node name="DuctRing" type="MeshInstance3D" parent="VisualRoot/Arms/Rotor2"]
+mesh = SubResource("Mesh_DuctRing")
+
+[node name="Blades" type="MeshInstance3D" parent="VisualRoot/Arms/Rotor2"]
+mesh = SubResource("Mesh_Blade")
+
+[node name="Rotor3" type="Node3D" parent="VisualRoot/Arms"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 0.05, 0.9)
+
+[node name="DuctRing" type="MeshInstance3D" parent="VisualRoot/Arms/Rotor3"]
+mesh = SubResource("Mesh_DuctRing")
+
+[node name="Blades" type="MeshInstance3D" parent="VisualRoot/Arms/Rotor3"]
+mesh = SubResource("Mesh_Blade")
+
+[node name="Rotor4" type="Node3D" parent="VisualRoot/Arms"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 0.05, 0.9)
+
+[node name="DuctRing" type="MeshInstance3D" parent="VisualRoot/Arms/Rotor4"]
+mesh = SubResource("Mesh_DuctRing")
+
+[node name="Blades" type="MeshInstance3D" parent="VisualRoot/Arms/Rotor4"]
+mesh = SubResource("Mesh_Blade")
+
+[node name="CargoHolder" type="Node3D" parent="VisualRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.65, 0)
+visible = false
+
+[node name="CarriedCrateMesh" type="MeshInstance3D" parent="VisualRoot/CargoHolder"]
+mesh = SubResource("Mesh_CarriedCrate")
+
+[node name="TargetMarker" type="Node3D" parent="."]
+
+[node name="ArrowPivot" type="Node3D" parent="TargetMarker"]
+
+[node name="ArrowShaft" type="MeshInstance3D" parent="TargetMarker/ArrowPivot"]
+position = Vector3(1.85, 0, 0)
+mesh = SubResource("Mesh_ArrowShaft")
+
+[node name="ArrowHead" type="MeshInstance3D" parent="TargetMarker/ArrowPivot"]
+position = Vector3(2.6, 0, 0)
+rotation = Vector3(0, 0, -1.570796)
+mesh = SubResource("Mesh_ArrowHead")
+
+[node name="ProgressRoot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+visible = false
+
+[node name="BubblePanel" type="MeshInstance3D" parent="ProgressRoot"]
+position = Vector3(0, 0.9, -0.05)
+mesh = SubResource("Mesh_Bubble")
+
+[node name="ProgressLabel" type="Label3D" parent="ProgressRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+billboard = 1
+double_sided = false
+text = "[Q] Yükleniyor..."
+font_size = 28
+outline_size = 6
+outline_modulate = Color(0.08, 0.12, 0.16, 1)
+
+[node name="ProgressBarBG" type="MeshInstance3D" parent="ProgressRoot"]
+position = Vector3(0, 0.45, 0)
+mesh = SubResource("Mesh_ProgressBarBG")
+
+[node name="ProgressFill" type="MeshInstance3D" parent="ProgressRoot"]
+position = Vector3(-0.85, 0.45, 0.05)
+mesh = SubResource("Mesh_ProgressBarFill")
+
+[node name="DetectionArea" type="Area3D" parent="."]
+collision_layer = 1
+collision_mask = 6
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DetectionArea"]
+shape = SubResource("Shape_Detect")
+
+[connection signal="area_entered" from="DetectionArea" to="." method="_on_detection_area_area_entered"]
+[connection signal="area_exited" from="DetectionArea" to="." method="_on_detection_area_area_exited"]

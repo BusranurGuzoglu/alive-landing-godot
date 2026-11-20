@@ -1,0 +1,57 @@
+[gd_scene load_steps=9 format=3 uid="uid://mainscene001"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/island.tscn" id="2_island"]
+[ext_resource type="PackedScene" path="res://scenes/ship.tscn" id="3_ship"]
+[ext_resource type="PackedScene" path="res://scenes/drone.tscn" id="4_drone"]
+[ext_resource type="PackedScene" path="res://scenes/ui.tscn" id="5_ui"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
+sky_top_color = Color(0.42, 0.74, 0.92, 1)
+sky_horizon_color = Color(0.68, 0.86, 0.95, 1)
+ground_bottom_color = Color(0.15, 0.75, 0.85, 1)
+ground_horizon_color = Color(0.68, 0.86, 0.95, 1)
+
+[sub_resource type="Sky" id="Sky_env"]
+sky_material = SubResource("ProceduralSkyMaterial_sky")
+
+[sub_resource type="Environment" id="Environment_main"]
+background_mode = 2
+sky = SubResource("Sky_env")
+ambient_light_source = 2
+ambient_light_color = Color(0.85, 0.92, 0.98, 1)
+ambient_light_energy = 0.35
+tonemap_mode = 0
+tonemap_exposure = 1.0
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_main")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.766044, -0.422618, 0.485121, 0, 0.75471, 0.656059, -0.642788, -0.50257, 0.578143, 10, 20, 10)
+light_color = Color(1, 0.97, 0.92, 1)
+light_energy = 0.7
+shadow_enabled = true
+shadow_blur = 1.6
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.681998, 0.731354, 0, -0.731354, 0.681998, -6, 25.5, 16.5)
+projection = 1
+current = true
+fov = 38.0
+size = 20.0
+
+[node name="Island" parent="." instance=ExtResource("2_island")]
+
+[node name="CargoShip" parent="." instance=ExtResource("3_ship")]
+transform = Transform3D(0.796035, 0.0381648, -0.604049, -0.0632231, 0.997576, -0.020215, 0.60194, 0.0542845, 0.796696, -31, 0.1, 0)
+
+[node name="RescueDrone" parent="." instance=ExtResource("4_drone")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 7.5, 4)
+
+[node name="CratesContainer" type="Node3D" parent="."]
+
+[node name="GameUI" parent="." instance=ExtResource("5_ui")]
